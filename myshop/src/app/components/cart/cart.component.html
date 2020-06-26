@@ -1,0 +1,49 @@
+<app-panel-top></app-panel-top>
+<div class="products">
+    <table style="margin:0 auto;" id="cartTable">
+        <thead *ngIf="this.mainService.products">
+            <tr>
+                <th>obrazek</th>
+                <th>dane</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let object of this.mainService.cart">
+                <tr style="background-color: whitesmoke;">
+                    <td>
+                        <img src="{{object.product.thumbnail}}" alt="">
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Tytuł: {{object.product.title}}</li>
+                            <li>Cena: {{object.product.price}}</li>
+                            <li>Kategoria: {{object.product.category}}</li>
+                        </ul>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+    </table>
+    <div class="summary">
+        <p style="color:darkblue">Do zapłaty: {{getCartPrice()}}</p>
+    </div>
+    <div class="payment">
+        <div id="paypal" class="paypal">
+          <img src="assets/images/paypallogo.png" alt="" width="150" height="150">
+        </div>
+        <form action="http://www.jakubadamus.cba.pl/paypal.php" method="get" #paymentForm>
+            <input type="text" #firstName name="firstName" id="" class="data" placeholder="Imie">
+            <input type="text" #lastName name="lastName" id="" class="data" placeholder="Nazwisko" >
+            <input type="text" #email name="email" id="" class="data" placeholder="Email">
+            <input type="text" name="phone" id="" class="data" placeholder="Telefon">
+            <ng-container *ngFor="let object of this.mainService.cart">
+                <input type="hidden" name="products[]" value="{{ object | json }}">
+            </ng-container>
+            <label for="" style="color: darkblue;">Akceptuję regulamin:<input #regulamin type="checkbox" name="aggrement" id="" (change)="0">
+            </label>
+            <button [disabled]="!regulamin.checked" (click)="paymentForm.submit()" style="color: darkblue;">
+                Kup
+            </button>
+        </form>
+    </div>
+</div>
